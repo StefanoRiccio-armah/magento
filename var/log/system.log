@@ -1,0 +1,97 @@
+[2026-01-09T08:55:46.360614+00:00] main.INFO: Source table payment_services_order_status_data_production_submitted_hash does not exist. Skipping data migration... [] []
+[2026-01-09T09:35:13.917886+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-09T09:35:14.191190+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-09T09:35:21.954780+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-09T09:35:22.286372+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-09T09:35:31.314953+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-09T09:35:31.600777+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-09T10:11:17.830051+00:00] main.ERROR: The "/var/www/html/var/tmp/alternative-source-css.lock" file can't be deleted.  [] []
+[2026-01-09T10:11:17.830422+00:00] main.CRITICAL: The "/var/www/html/var/tmp/alternative-source-css.lock" file can't be deleted.  [] []
+[2026-01-09T10:11:28.681923+00:00] main.ERROR: The "/var/www/html/var/tmp/alternative-source-css.lock" file can't be deleted.  [] []
+[2026-01-09T10:11:28.682524+00:00] main.CRITICAL: The "/var/www/html/var/tmp/alternative-source-css.lock" file can't be deleted.  [] []
+[2026-01-09T10:53:10.524461+00:00] main.ERROR: The "/var/www/html/var/tmp/alternative-source-css.lock" file can't be deleted.  [] []
+[2026-01-09T10:53:10.524878+00:00] main.CRITICAL: The "/var/www/html/var/tmp/alternative-source-css.lock" file can't be deleted.  [] []
+[2026-01-09T11:53:38.728762+00:00] main.ERROR: Command "cache:flushù" is not defined.
+
+Did you mean one of these?
+    cache:clean
+    cache:clean:payment_services_merchant_scopes
+    cache:disable
+    cache:enable
+    cache:flush
+    cache:status
+#0 /var/www/html/vendor/symfony/console/Application.php(266): Symfony\Component\Console\Application->find('cache:flush\xC3\xB9')
+#1 /var/www/html/vendor/magento/framework/Console/Cli.php(118): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#2 /var/www/html/vendor/symfony/console/Application.php(175): Magento\Framework\Console\Cli->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#3 /var/www/html/bin/magento(23): Symfony\Component\Console\Application->run()
+#4 {main} [] []
+[2026-01-09T11:55:54.130481+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-09T11:55:54.405417+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-09T11:56:02.441570+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-09T11:56:02.722899+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-09T11:56:12.384438+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-09T11:56:12.786452+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-09T13:37:08.947589+00:00] main.ERROR: The "/var/www/html/var/tmp/alternative-source-css.lock" file can't be deleted.  [] []
+[2026-01-09T13:37:08.948322+00:00] main.CRITICAL: The "/var/www/html/var/tmp/alternative-source-css.lock" file can't be deleted.  [] []
+[2026-01-09T14:30:26.465650+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-09T14:30:26.755430+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-09T14:30:34.234743+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-09T14:30:34.513331+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-09T14:30:44.379471+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-09T14:30:44.669662+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-09T15:42:03.354885+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-09T15:42:03.704689+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-09T15:42:10.885443+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-09T15:42:11.165167+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-09T15:42:20.648125+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-09T15:42:20.931548+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-12T10:32:48.982473+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-12T10:32:49.237424+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-12T10:32:58.364339+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-12T10:32:58.626526+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-12T10:33:07.319612+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-12T10:33:07.581398+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-12T11:12:50.066143+00:00] main.ERROR: The namespace "s" is ambiguous.
+Did you mean one of these?
+    setup
+    setup:config
+    setup:db-data
+    setup:db-schema
+    setup:db
+    setup:di
+    setup:performance
+    setup:store-config
+    setup:static-content
+    store
+    store:website
+    setup:db-declaration
+    saas
+    saas:list
+    saas:initialize
+    security
+    security:recaptcha
+    sampledata.
+#0 /var/www/html/vendor/symfony/console/Application.php(729): Symfony\Component\Console\Application->findNamespace('s')
+#1 /var/www/html/vendor/symfony/console/Application.php(266): Symfony\Component\Console\Application->find('s:up\xC3\xB9')
+#2 /var/www/html/vendor/magento/framework/Console/Cli.php(118): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#3 /var/www/html/vendor/symfony/console/Application.php(175): Magento\Framework\Console\Cli->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 /var/www/html/bin/magento(23): Symfony\Component\Console\Application->run()
+#5 {main} [] []
+[2026-01-12T12:03:10.030997+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-12T12:03:10.281632+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-12T12:03:18.929321+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-12T12:03:19.189254+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-12T12:03:27.864649+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-12T12:03:28.128526+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-12T12:57:55.774095+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-12T12:57:56.033573+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-12T12:58:04.777870+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-12T12:58:05.040307+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-12T12:58:13.655524+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-12T12:58:13.919148+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-12T13:28:21.651930+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-12T13:28:21.918141+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/default [] []
+[2026-01-12T13:28:30.712435+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-12T13:28:30.972895+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Hyva/reset [] []
+[2026-01-12T13:28:39.803594+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
+[2026-01-12T13:28:40.068362+00:00] main.NOTICE: magento_import returns empty result by path css/source/_email.less for theme Armah/hyvabase [] []
