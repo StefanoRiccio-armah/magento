@@ -1,44 +1,86 @@
 <?php
-/**
- * Hyvä Themes - https://hyva.io
- * Copyright © Hyvä Themes. All rights reserved.
- * See COPYING.txt for license details.
- */
 
 declare(strict_types=1);
 
-use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Search\Helper\Data as SearchHelper;
-use Magento\Search\ViewModel\ConfigProvider as SearchConfig;
-
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\Model\ViewModelRegistry;
 
 /** @var Escaper $escaper */
 /** @var Template $block */
-/** @var SearchHelper $helper */
 /** @var ViewModelRegistry $viewModels */
-
-/** @var LucideIcons $lucideIcons */
-$lucideIcons = $viewModels->require(LucideIcons::class);
-
 /** @var SearchHelper $helper */
+
 $helper = $this->helper(SearchHelper::class);
 
-/** @var SearchConfig $searchConfig */
-$searchConfig = $viewModels->require(SearchConfig::class);
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+function cleanPlaceholderContent(string $content): string
+{
+    $content = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $content);
+    $content = preg_replace('/<div\b[^>]*>(.*?)<\/div>/is', '$1', $content);
+    $content = strip_tags($content);
+    return trim($content);
+}
+
+$placeholder1 = cleanPlaceholderContent($block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('1-placeholder-search')->toHtml());
+$placeholder2 = cleanPlaceholderContent($block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('2-placeholder-search')->toHtml());
 ?>
+
 <script>
     'use strict';
 
     function initMiniSearch() {
         return {
             minSearchLength: <?= (int) $helper->getMinQueryLength() ?>,
-            <?php if ($searchConfig->isSuggestionsAllowed()): ?>
             suggestions: [],
+            placeholders: [
+                <?= json_encode($placeholder1) ?>,
+                <?= json_encode($placeholder2) ?>
+            ],
+            currentPlaceholderIndex: 0,
+            typingEffectText: '',
+            typingIndex: 0,
+            deleting: false,
+            paused: false,
+            initTypingEffect() {
+                this.$nextTick(() => {
+                    this.updatePlaceholder();
+                    setInterval(() => {
+                        if (!this.paused) {
+                            this.updatePlaceholder();
+                        }
+                    }, 100);
+                });
+            },
+            updatePlaceholder() {
+                if (!this.$refs.searchInput) return;
+
+                const fullText = this.placeholders[this.currentPlaceholderIndex];
+
+                if (!this.deleting && this.typingIndex < fullText.length) {
+                    this.typingEffectText += fullText[this.typingIndex];
+                    this.typingIndex++;
+                } else if (!this.deleting && this.typingIndex === fullText.length) {
+                    this.paused = true;
+                    setTimeout(() => {
+                        this.deleting = true;
+                        this.paused = false;
+                    }, 1500);
+                } else if (this.deleting && this.typingIndex > 0) {
+                    this.typingIndex--;
+                    this.typingEffectText = fullText.substring(0, this.typingIndex);
+                } else if (this.deleting && this.typingIndex === 0) {
+                    this.deleting = false;
+                    this.currentPlaceholderIndex = (this.currentPlaceholderIndex + 1) % this.placeholders.length;
+                }
+
+                this.$refs.searchInput.setAttribute('placeholder', this.typingEffectText);
+            },
+
             suggest() {
                 const search = this.$refs.searchInput;
                 if (search.value.length >= this.minSearchLength) {
@@ -50,25 +92,30 @@ $searchConfig = $viewModels->require(SearchConfig::class);
                 }
             },
             fetchSuggestions(term) {
-                fetch(
-                    window.BASE_URL + 'search/ajax/suggest?' + new URLSearchParams({q: term}),
-                    {
+                fetch(window.BASE_URL + 'search/ajax/suggest?' + new URLSearchParams({
+                        q: term
+                    }), {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
                         }
-                    }
-                )
-                .then(response => response.json())
-                .then(result => this.suggestions = result);
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(result => this.suggestions = result)
+                    .catch(error => {
+                        console.error('Error fetching suggestions:', error);
+                        this.suggestions = [];
+                    });
             },
-            <?php endif ?>
             search(term) {
                 const search = this.$refs.searchInput;
                 term = term || search.value;
                 if (term.length < this.minSearchLength) {
                     search.setCustomValidity('<?= $escaper->escapeJs(
-                        __('Minimum Search query length is %1', $helper->getMinQueryLength())
-                    ) ?>');
+                                                    __('Minimum Search query length is %1', $helper->getMinQueryLength())
+                                                ) ?>');
                     search.reportValidity();
                 } else {
                     search.setCustomValidity('');
@@ -87,64 +134,72 @@ $searchConfig = $viewModels->require(SearchConfig::class);
         }
     }
 </script>
-<div class="container py-2 mx-auto text-black" x-data="initMiniSearch()">
-    <search title="<?= $escaper->escapeHtmlAttr(__('Store')) ?>" role="search">
-        <form
-            id="search_mini_form"
-            class="form minisearch flex"
-            action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>"
-            method="get"
-            @submit.prevent="search()"
-            x-ref="form"
-        >
-            <div class="relative w-full">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <?= $lucideIcons->searchHtml('text-[#EA4C50]', 20, 20, ['aria-hidden' => 'true']); ?>
-                </div>
-                <label class="sr-only" for="search">
-                    <?= $escaper->escapeHtml(__('Search')) ?>
-                </label>
-                <input
-                    id="search"
-                    x-ref="searchInput"
-                    type="search"
-                    autocomplete="off"
-                    name="<?= $escaper->escapeHtmlAttr($helper->getQueryParamName()) ?>"
-                    value="<?= /** @noEscape */ $helper->getEscapedQueryText() ?>"
-                    placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
-                    maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
-                    class="form-input w-full pl-10 text-primary"
-                    @search-open.window.debounce.10="$el.focus(); $el.select()"
-                    <?php if ($searchConfig->isSuggestionsAllowed()): ?>
-                        @focus.once="suggest"
-                        @input.debounce.300="suggest"
-                        @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
-                    <?php endif ?>
-                    @keydown.enter.prevent="search()"
-                >
-            </div>
-        </form>
-    </search>
-    <?php if ($searchConfig->isSuggestionsAllowed()): ?>
+
+<search x-data="initMiniSearch()" x-init="initTypingEffect()">
+    <form class="form minisearch relative p-0 bg-transparent" id="search_mini_form" x-ref="form" @submit.prevent="search()"
+        action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get">
+
+        <!-- <div class="block lg:hidden"><?php //TODO echo  $heroicons->searchHtml('stroke-1', 26, 26, ['aria-hidden' => 'true']); ?></div> -->
+
+        <div class="rounded-t-[5px] lg:rounded-[10px] border-2 shadow-md flex pr-2 px-6_py-4 bg-primary lg:bg-transparent lg:p-0
+                    bg-white border-[#f5f5f5] lg:w-full mx-auto
+                    ">
+
+            <input id="search"
+                x-ref="searchInput"
+                type="search"
+                autocomplete="off"
+                name="<?= $escaper->escapeHtmlAttr($helper->getQueryParamName()) ?>"
+                value="<?=
+                        /** @noEscape */
+                        $helper->getEscapedQueryText() ?>"
+                maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
+                class="w-full
+                        leading-5
+                        py-2
+                        pl-5 lg:pl-0
+                        text-black
+                        border-transparent
+                        rounded-full
+                        placeholder:text-[#BCBFC5] placeholder:text-[13px]
+                        focus:ring-0
+                        lg:order-1"
+
+                @focus.once="suggest"
+                @input.debounce.300="suggest"
+                @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
+                @search-open.window.debounce.10="$el.focus(); $el.select()">
+
+                <label class="sr-only" for="search" data-role="minisearch-label">
+                <span><?= $escaper->escapeHtml(__('Search')) ?></span>
+            </label>
+
+            <button
+                type="submit"
+                id="search-button"
+                title="<?= $escaper->escapeHtml(__('Search')) ?>"
+                class="px-3 lg:ml-1.5 text-gray-500 lg:block search order-2 lg:order-first"
+                aria-label="<?= $escaper->escapeHtml(__('Search')) ?>">
+                <?= $heroicons->searchHtml('text-primary', 20, 20, ['aria-hidden' => 'true']); ?>
+            </button>
+
+        </div>
         <template x-if="suggestions.length > 0">
-            <nav
-                aria-label="<?= $escaper->escapeHtmlAttr(__('Search Suggestions')) ?>"
-                class="flex flex-col mt-1 text-grey-800 gap-1"
-            >
+            <div class="hidden absolute z-5 lg:flex flex-col w-full mt-2 leading-normal text-slate-800">
                 <template x-for="suggestion in suggestions">
-                    <button
-                        type="button"
-                        class="flex justify-between p-2 bg-white even:bg-gray-50 border border-gray-300 hover:bg-gray-100"
+                    <div class="flex justify-between p-2 mb-1 border rounded-md cursor-pointer bg-container-lighter even:bg-container border-container hover:bg-container-darker"
+                        tabindex="0"
                         @click="search(suggestion.title)"
                         @keydown.enter="search(suggestion.title)"
-                        @keydown.arrow-up.prevent="focusElement($event.target.previousElementSibling) || $refs.searchInput.focus()"
-                        @keydown.arrow-down.prevent="focusElement($event.target.nextElementSibling)"
-                    >
+                        @keydown.arrow-up.prevent="
+                              focusElement($event.target.previousElementSibling) || $refs.searchInput.focus()
+                          "
+                        @keydown.arrow-down.prevent="focusElement($event.target.nextElementSibling)">
                         <span x-text="suggestion.title"></span>
                         <span x-text="suggestion.num_results"></span>
-                    </button>
+                    </div>
                 </template>
-            </nav>
+            </div>
         </template>
-    <?php endif ?>
-</div>
+    </form>
+</search>

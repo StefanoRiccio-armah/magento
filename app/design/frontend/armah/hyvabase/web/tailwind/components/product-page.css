@@ -1,0 +1,109 @@
+.page-product-bundle {
+    .price-final_price {
+        .price-from,
+        .price-to {
+            .price-container {
+                @apply text-gray-700 block mb-4;
+
+                .price-label {
+                    @apply block text-lg font-medium;
+                }
+
+                .price {
+                    @apply font-semibold text-2xl text-gray-800 leading-tight;
+                }
+            }
+
+            .price-including-tax + .price-excluding-tax {
+                @apply mt-1;
+
+                .price {
+                    @apply text-base;
+                }
+            }
+
+            .old-price {
+                .price-container {
+                    .price,
+                    .price-label {
+                        @apply text-gray-500 font-normal inline text-base;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+ .catalog-product-view .title-container{
+    padding: 0 !important;
+}
+
+.catalog-product-view{
+    nav.breadcrumbs{
+        @apply bg-container-darker;
+        
+        ol{
+            @apply lg:justify-center pt-4;
+        }
+    }
+}
+
+.product-page-services {
+    .pagebuilder-column {
+        margin: auto 0 !important;
+    }
+
+    .prod-service:nth-child(even) [data-content-type="row"]{
+        gap: 0 !important;
+        padding: 8px 0 4px 5px;
+    }
+    
+    .third-service .pagebuilder-column-group{
+        padding-left:3px !important;
+    }.fourth-service .pagebuilder-column-group{
+        padding-left:6px !important;
+    }
+    .pagebuilder-column-group {
+        margin-bottom: 0 !important;
+        padding: 14px 0 14px 9px !important;
+
+        .pagebuilder-column [data-content-type="text"]{
+            @apply xl:text-[13px] 2xl:text-sm !important
+        }
+    }
+
+    .prod-service:nth-child(even) img {
+        width: 39px;
+    }
+
+    .prod-service:nth-child(odd) img {
+        width: 29px;
+    }
+}
+
+.amasty-reward-points-product{
+    span:not([x-text="highlight.caption_text"]){
+        display:none;
+    }
+    [x-text="highlight.caption_text"]{
+        color:#fff387 !important;
+        margin-left:6px !important;
+    }
+    &:before{
+        display: none !important;
+    }
+}
+
+.servizi-prod-page{
+    svg,img,figure{
+        width:39px;
+    }
+    p{
+        @apply text-secondary font-semibold;
+    }
+}
+
+.title-container .amshopby-option-link{
+    @apply hidden;
+}

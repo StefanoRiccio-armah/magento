@@ -1,0 +1,233 @@
+:where(html) {
+    scrollbar-gutter: stable;
+}
+
+.clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+body:not(.cms-index-index):not(.catalog-product-view) .columns{
+    @apply lg:container;
+}
+
+
+/* PAGE404 */
+body.cms-no-route {
+    main#maincontent{
+        @apply flex flex-col justify-center items-center min-h-[35vh] !important;
+    }
+    .title-container{
+       @apply items-center justify-center text-[125px] leading-none !important; 
+    }
+    .columns{
+        display: flex !important;
+        column-gap: revert !important;
+        .column.main{
+            width: 100% !important;
+        }
+    }
+}
+
+.columns {
+    @apply grid grid-cols-1 gap-x-8;
+    grid-template-rows: auto minmax(0, 1fr);
+
+    .main {
+        @apply order-2;
+    }
+
+    .sidebar {
+        @apply order-3;
+    }
+
+    .product-main-full-width & {
+        @apply max-w-none p-0;
+    }
+
+    .page-main-full-width & {
+        @apply max-w-none px-0;
+    }
+}
+
+.account,
+.page-with-filter {
+    .columns {
+        .sidebar-main {
+            @apply order-1;
+        }
+    }
+}
+
+@screen sm {
+    .page-layout-2columns-left,
+    .page-layout-2columns-right,
+    .page-layout-3columns {
+        .columns {
+            @apply grid-cols-2;
+
+            .main {
+                @apply col-span-2;
+            }
+
+            .sidebar {
+                @apply order-3;
+            }
+        }
+    }
+
+    .account,
+    .page-with-filter {
+        .columns {
+            .sidebar-main {
+                @apply col-span-full;
+            }
+        }
+    }
+
+    .account {
+        .columns {
+            .sidebar-additional {
+                @apply col-span-2;
+            }
+        }
+    }
+}
+
+@screen md {
+    .page-layout-2columns-left,
+    .page-layout-2columns-right,
+    .page-layout-3columns {
+        .columns {
+            @apply grid-cols-3;
+
+            .main {
+                @apply row-span-2;
+            }
+
+            .sidebar {
+                @apply col-span-1;
+            }
+        }
+    }
+
+    .page-layout-2columns-left,
+    .page-layout-3columns {
+        .columns {
+            .main {
+                @apply col-start-2 !important;
+            }
+            .sidebar {
+                @apply order-1;
+            }
+
+            .sidebar ~ .sidebar-additional {
+                @apply order-3;
+            }
+        }
+    }
+
+    .page-layout-2columns-right,
+    .page-layout-2columns-right.page-with-filter {
+        .sidebar-main {
+            @apply order-3;
+        }
+    }
+}
+
+@screen lg {
+    .page-layout-2columns-left,
+    .page-layout-2columns-right,
+    .page-layout-3columns {
+        .columns {
+            @apply grid-cols-4;
+        }
+    }
+
+    .page-layout-2columns-left,
+    .page-layout-2columns-right {
+        .columns {
+            .main {
+                @apply col-span-3;
+            }
+        }
+    }
+    .page-layout-3columns {
+        .columns {
+            .sidebar-additional {
+                @apply col-start-4;
+            }
+        }
+    }
+}
+
+.product-image-container {
+    width: 100% !important;
+
+    img {
+        width: 100%;
+    }
+}
+
+
+.ricetta-elettronica-row .pagebuilder-column-line{
+    @apply grid lg:grid-cols-2 !important;
+
+    .pagebuilder-column{
+        @apply w-full !important;
+    }
+}
+
+
+.cms-no-route .columns > *:not(.main){
+    display: none !important;
+}
+
+[data-content-type=row][data-appearance=contained]{
+    @apply px-[5px] !important;
+}
+
+figure > img {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+header.page-header{
+    z-index: 10;
+}
+
+.catalog-category-view #maincontent,.ambrand-index-index #maincontent{
+    @apply flex flex-col;
+
+    .title-container{
+        @apply order-first;
+    }
+
+}
+
+
+.container,.lg\:container,.md\.container{
+    @apply px-[10px] md:px-10 lg:px-12 !important;
+    @media screen and (min-width:1340px) {
+        max-width:1340px !important;
+    }
+}
+
+picture > img { 
+    width: 100% !important;
+}
+
+.container, .sm\:container, .md\:container, .lg\:container, .xl\:container, .\2xl\:container{
+    @apply max-w-none 2xl:max-w-[1340px] px-4 !important;
+}
+
+
+
+.catalog-category-view .columns {
+    @apply xl:grid-cols-5 !important;
+    & .column.main{
+        @apply xl:col-span-4 !important;
+    }
+}

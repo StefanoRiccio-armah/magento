@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
@@ -23,221 +24,336 @@ $showWishlist = true;
 ?>
 
 <script>
-  function initHeader() {
-    return {
-      searchOpen: false,
-      cart: {},
-      isCartOpen: false,
-      screenWidth: window.innerWidth,
-      getData(data) {
-        if (data.cart) {
-          this.cart = data.cart
+    function initHeader() {
+        return {
+            searchOpen: false,
+            isMobileMenuOpen: false,
+            cart: {},
+            isCartOpen: false,
+            isPopperOpen: false,
+            isScrolled: false,
+            screenWidth: window.innerWidth,
+            getData(data) {
+                if (data.cart) {
+                    this.cart = data.cart
+                }
+            },
+            isCartEmpty() {
+                return !this.cart.summary_count
+            },
+            toggleCart(event) {
+                if (event.detail && event.detail.isOpen !== undefined) {
+                    this.isCartOpen = event.detail.isOpen
+                } else {
+                    this.isCartOpen = true
+                }
+            },
+            updateScreenWidth() {
+                this.screenWidth = window.innerWidth;
+            },
+            init() {
+                // Debounce resize event for better performance
+                let timeout;
+                window.addEventListener('resize', () => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        this.updateScreenWidth();
+                    }, 150);
+                });
+            }
         }
-      },
-      isCartEmpty() {
-        return !this.cart.summary_count
-      },
-      toggleCart(event) {
-        if (event.detail && event.detail.isOpen !== undefined) {
-          this.isCartOpen = event.detail.isOpen
-        } else {
-          this.isCartOpen = true
-        }
-      },
-      updateScreenWidth() {
-        this.screenWidth = window.innerWidth;
-      },
-      init() {
-        window.addEventListener('resize', () => {
-          this.updateScreenWidth();
-        });
-      }
     }
-  }
 </script>
 
-<div 
-  id="header" 
-  class="relative z-30 w-full bg-white border-b border-gray-100 shadow-sm"
-  x-data="initHeader()"
-  @private-content-loaded.window="getData(event.detail.data)"
->
-  
-  <!-- BARRA SUPERIORE DESKTOP -->
-  <template x-if="screenWidth > 1024">
-    <div class="bg-[#284C70] flex flex-row items-center justify-center gap-40 p-2 py-4 px-8">
-      <a href="/faq" class="text-[#F5B301] text-base whitespace-nowrap">
-        Leggi le nostre <span class="text-white">FAQ</span>
-      </a>
-      <p class="text-white text-base">Recensioni Feedaty</p>
-      <p class="text-white text-base whitespace-nowrap">
-        Spediamo Gratis <span class="text-[#F5B301]">da €79,90</span>
-      </p>
-    </div>
-  </template>
+<div
+    id="header"
+    class="z-30 w-full bg-container-lighter border-container-lighter"
+    x-data="initHeader()"
+    @private-content-loaded.window="getData(event.detail.data)"
+    @keydown.escape.window="isMobileMenuOpen = false; isPopperOpen = false"
+    x-init="() => {
+      const updateScroll = () => {
+          if (window.scrollY > 40) {
+              isScrolled = true;
+          } else {
+              isScrolled = false;
+          }
+      }
 
-  <!-- BARRA SUPERIORE MOBILE -->
-  <template x-if="screenWidth <= 1024">
-    <div class="bg-[#284C70] flex flex-col items-center justify-center gap-2 p-2 py-3 px-4">
-      <p class="text-white text-sm">Recensioni Feedaty</p>
-    </div>
-  </template>
+      updateScroll();
+      window.addEventListener('scroll', updateScroll);
+  }"
+    :class="{
+      'fixed top-[-40px] left-0 w-full bg-white shadow-md': isScrolled
+  }">
 
-  <!-- PRIMA RIGA HEADER -->
-  <div class="container mx-auto px-4 py-3">
-    <div class="flex items-center justify-between gap-4">
-
-      <!-- MOBILE: Hamburger + Logo -->
-      <template x-if="screenWidth <= 1024">
-        <div class="flex items-center gap-3">
-          <!-- Menu mobile hamburger -->
-          <button class="p-2 lg:hidden" aria-label="Menu">
-            <?= $lucideIcons->menuHtml('w-6 h-6', 24, 24) ?>
-          </button>
-          
-          <!-- Logo -->
-          <div class="w-32">
-            <?= $block->getChildHtml('logo'); ?>
-          </div>
-        </div>
-      </template>
-
-      <!-- DESKTOP: Logo -->
-      <template x-if="screenWidth > 1024">
-        <div class="flex-shrink-0 w-48">
-            <?= $block->getChildHtml('logo'); ?>
-        </div>
-      </template>
-
-      <!-- DESKTOP: Search Bar (solo desktop) -->
-      <template x-if="screenWidth > 1024">
-        <div class="flex-1 mx-4">
-          <div class="relative">
-                      <?= $block->getChildHtml('header-search'); ?>
-          </div>
-        </div>
-      </template>
-
-      <!-- HEADER ACTIONS (adattate per mobile/desktop) -->
-      <div class="flex items-center gap-4 lg:gap-4 px-3 lg:px-4  lg:bg-[#EA4C50] bg-none rounded-md">
-
-        <!-- WhatsApp -->
-        <a
-          href="https://wa.me/391234567890"
-          target="_blank"
-          class="flex items-center gap-2 text-white text-sm font-semibold"
-          aria-label="Chatta con noi"
-        >
-          <?= $hyvaicons->whatsappHtml('w-4 h-4 lg:w-5 lg:h-5 lg:text-white text-green', 20, 20) ?>
-          <!-- Testo solo su desktop -->
-          <template x-if="screenWidth > 1024">
-            <span>Chatta con noi</span>
-          </template>
-        </a>
-
-        <!-- Wishlist (nascosta su mobile) -->
-        <template x-if="screenWidth > 1024">
-          <?php if ($showWishlist): ?>
-            <a
-              href="<?= $escaper->escapeUrl($block->getUrl('wishlist')) ?>"
-              class="p-2 text-white hover:text-gray-200 transition"
-              aria-label="Wishlist"
-            >
-              <?= $lucideIcons->heartHtml('w-5 h-5', 20, 20) ?>
-            </a>
-          <?php endif; ?>
-        </template>
-
-        <!-- Account -->
-        <a
-          href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>"
-          class="p-2 text-white hover:text-gray-200 transition"
-          aria-label="Account"
-        >
-          <?= $hyvaicons->ominoHtml('w-4 h-4 lg:w-5 lg:h-5 text-white', 20, 20) ?>
-        </a>
-        <!-- Cart -->
-        <?php if ($showMiniCart): ?>
-          <button
-            type="button"
-            class="relative p-2 text-white hover:text-gray-200 transition"
-            @click="$dispatch('toggle-cart', { isOpen: true })"
-            aria-label="Carrello"
-          >
-            <?= $hyvaicons->cartHtml('w-5 h-5 lg:w-6 lg:h-6  text-black lg:text-white', 24, 24) ?>
-            <span
-              class="absolute -top-1 -right-1 bg-white text-[#EA4C50] text-xs font-semibold rounded-full px-1.5 min-w-[18px] text-center"
-              x-text="isCartEmpty() ? '0' : cart.summary_count"
-              x-show="!isCartEmpty()"
-            ></span>
-          </button>
-        <?php endif; ?>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- SECONDA RIGA: Navigation e Search Mobile -->
-  <div class="container mx-auto px-4 pb-3 mb-2">
-    
-    <!-- MOBILE: Search Bar -->
-    <template x-if="screenWidth <= 1024">
-      <div class="mb-3">
-        <div class="relative">
-                      <?= $block->getChildHtml('header-search'); ?>
-        </div>
-      </div>
-    </template>
-
-    <!-- DESKTOP: Menu Navigation -->
+    <!-- BARRA SUPERIORE -->
     <template x-if="screenWidth > 1024">
-      <div class="flex items-center justify-between gap-4">
-        <!-- Menu principale -->
-        <div class="flex-1">
-          <nav class="flex gap-6">
-            <a href="/categoria-1" class="text-gray-700 hover:text-[#EA4C50] font-medium">Categoria 1</a>
-            <a href="/categoria-2" class="text-gray-700 hover:text-[#EA4C50] font-medium">Categoria 2</a>
-            <a href="/categoria-3" class="text-gray-700 hover:text-[#EA4C50] font-medium">Categoria 3</a>
-            <a href="/categoria-4" class="text-gray-700 hover:text-[#EA4C50] font-medium">Categoria 4</a>
-          </nav>
+        <div class="bg-[#284C70] border-b border-gray-200 min-h-9">
+            <div class="container mx-auto flex flex-row items-center justify-between  p-2 pt-1 px-6">
+                <a href="/faq" class="text-[#ecc36d] text-base whitespace-nowrap">
+                    Leggi le nostre <span class="text-white font-semibold">FAQ</span>
+                </a>
+                <p class="text-black text-base">Recensioni Feedaty</p>
+                <div class="flex flex-row items-center justify-center">
+                    <p class="text-white text-base whitespace-nowrap font-semibold">
+                        Spediamo Gratis <span class="text-[#ecc36d]">da €79,90</span>
+                    </p>
+                    <?= $hyvaicons->spedizioniHtml('text-[#ecc36d]', 26, 26) ?>
+                </div>
+            </div>
         </div>
-
-        <!-- Links in evidenza -->
-        <div class="flex items-center gap-4 px-6 py-2 bg-[#284C70] rounded-md mb-2">
-          <a href="/rimedi" class="text-white text-sm font-semibold whitespace-nowrap">
-            Rimedi
-          </a>
-          <a href="/brands" class="text-[#F5B301] text-sm font-semibold whitespace-nowrap">
-            Top Brand
-          </a>
-          <a href="/offerte" class="text-white text-sm font-semibold whitespace-nowrap">
-            Offerte a Tempo
-          </a>
-        </div>
-      </div>
     </template>
-
-    <!-- MOBILE: Banner spedizioni -->
     <template x-if="screenWidth <= 1024">
-      <div class="mt-3 p-2 text-center border-2 border-[#284C70] rounded-md">
-        <span class="font-semibold">Spedizioni Gratuite</span>
-        <span class="text-[#F5B301] font-semibold">da €79,90</span>
-      </div>
+        <div class="bg-[#284C70]">
+            <div class="container mx-auto flex flex-col items-center justify-center gap-2 p-2 py-2 px-4">
+                <p class="text-black text-sm">Recensioni Feedaty</p>
+            </div>
+        </div>
     </template>
 
-  </div>
+    <!-- ======== STRUTTURA HEADER DESKTOP ======== -->
+    <template x-if="screenWidth > 1024">
+        <div class="border-b border-gray-100">
+            <!-- Prima Riga Desktop -->
+            <div class="mx-auto mb-2">
+                <div class="lg:container flex items-center lg:items-end justify-between w-full h-[75px] px-3 lg:px-6 pt-1.5 pb-0.5 lg:pt-3 mx-auto mt-0">
+                    <!-- Logo -->
+                    <div class="flex gap-7 lg:max-w-[215px] lg:w-2/5">
+                        <?= $block->getChildHtml('logo'); ?>
+                    </div>
 
-  <!-- Indicatore dimensione schermo per debug -->
-  <div class="fixed bottom-4 right-4 bg-black text-white px-3 py-2 rounded-lg text-xs z-50">
-    <span x-text="'Larghezza: ' + screenWidth + 'px'"></span>
-    <span x-text="screenWidth <= 1024 ? ' (Mobile)' : ' (Desktop)'"></span>
-  </div>
+                    <!-- Search Bar -->
+                    <div class="max-w-[760px] w-[60%] w-full mx-4">
+                        <?= $block->getChildHtml('header-search'); ?>
+                    </div>
 
-</div>
+                    <!-- Actions -->
+                    <div class="flex shrink-0 w-1/3 lg:w-[245px] 2xl:w-[300px] lg:h-[42px] lg:bg-primary rounded-[10px] px-4 gap-3 lg:gap-0 justify-between items-center mr-1 lg:mr-0 text-white">
+
+                        <!-- CONTACT US -->
+                        <div id="header-contact-us" class="2xl:mx-3 flex items-center">
+                            <a href="https://wa.me/391234567890"
+                                class="flex items-center gap-2 whitespace-nowrap text-xs 2xl:text-sm font-semibold text-white"
+                                target="_blank">
+                                <?= $hyvaicons->whatsappColorchangingHtml('text-[#5DB95D] lg:text-white', 19, 19) ?>
+                                <span class="hidden lg:block">Chatta con Noi</span>
+                            </a>
+                        </div>
+                        <div class="flex items-center justify-between gap-4 2xl:gap-5 order-3 md:-mr-1 rounded-full lg:py-1 lg:px-2">
+                            <a class="relative hidden text-center lg:inline-block"
+                                href="<?= $escaper->escapeUrl($block->getUrl('wishlist')) ?>">
+                                <?= $hyvaicons->aleheartHtml('mx-auto text-white', 20, 20, ['aria-hidden' => 'true']) ?>
+                            </a>
+
+                            <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>" aria-label="Account">
+                                <?= $hyvaicons->aleaccountHtml('text-white', 20, 20) ?>
+                            </a>
+
+                            <?php if ($showMiniCart): ?>
+                                <button type="button" class="relative text-white hover:text-gray-200 transition" @click="$dispatch('toggle-cart', { isOpen: true })" aria-label="Carrello">
+                                    <?= $hyvaicons->alecartHtml('text-white', 20, 20) ?>
+                                    <span
+                                        class="flex items-center justify-center absolute -bottom-1.5 right-[-6px]  w-4 h-4 min-w-[15px] min-h-[15px] rounded-full bg-[#ea001b] lg:bg-secondary text-white text-[10px] font-semibold"
+                                        x-text="(cart && cart.summary_count !== undefined) ? (cart.summary_count || 0) : 0">
+                                    </span>
+
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seconda Riga Desktop -->
+            <div class="mx-auto px-2 pb-1 mb-2 relative" @click.outside="isPopperOpen = false">
+                <div class="lg:container flex justify-between items-start gap-4  px-0 mt-3 lg:mt-0  lg:text-[13px] 2xl:text-[15px]">
+                    <div class="w-full hidden lg:flex mt-2 text-15 font-bold">
+                        <?= $block->getChildHtml('topmenu'); ?>
+                    </div>
+
+                    <div class="flex shrink-0 w-1/3 lg:w-[245px] 2xl:w-[300px] justify-end">
+
+                        <div class="hidden xl:flex lg:h-[42px] w-full lg:bg-secondary rounded-[10px] px-4 gap-3 justify-between items-center mr-1 lg:mr-0 text-white">
+
+                            <a href="/rimedi" class="font-semibold text-white">Rimedi</a>
+                            <a href="/brands" class="font-semibold text-[#ECC36D]">Top Brand</a>
+                            <a href="/offerte" class="text-white font-semibold">Offerte a Tempo</a>
+                        </div>
+                        <button
+                            @click="isPopperOpen = !isPopperOpen"
+                            class="flex xl:hidden items-center justify-center w-[42px] h-[42px] bg-secondary rounded-[10px] text-white"
+                            aria-label="Apri menu rimedi">
+                            <?= $hyvaicons->menuHtml('w-6 h-6', 24, 24) ?>
+                        </button>
+                    </div>
+                </div>
+                <div
+                    x-show="isPopperOpen"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 transform -translate-y-2"
+                    x-transition:enter-end="opacity-100 transform translate-y-0"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 transform translate-y-0"
+                    x-transition:leave-end="opacity-0 transform -translate-y-2"
+                    class="absolute top-full right-[9rem] mt-[-25px] w-35 bg-secondary rounded-md shadow-lg p-4 z-40"
+                    x-cloak>
+                    <div class="flex flex-col text-sm">
+                        <a href="/rimedi" class="font-semibold text-white hover:text-primary rounded-md">Rimedi</a>
+                        <a href="/brands" class="font-semibold text-[#ECC36D] hover:text-primary rounded-md">Top Brand</a>
+                        <a href="/offerte" class="font-semibold text-white hover:text-primary rounded-md">Offerte a Tempo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- ======== STRUTTURA HEADER MOBILE ======== -->
+    <template x-if="screenWidth <= 1024">
+        <div class="border-container-lighter bg-container-lighter w-full shadow-md">
+            <!-- Prima Riga Mobile -->
+            <div class="w-full mx-auto px-2 py-3">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <button class="p-2" aria-label="Menu" @click="isMobileMenuOpen = true">
+                            <?= $hyvaicons->menuHtml('w-6 h-6 text-gray-700', 24, 24) ?>
+                        </button>
+                        <div class="w-34">
+                            <?= $block->getChildHtml('logo'); ?>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+
+                        <a href="https://wa.me/391234567890" target="_blank" class="px-2" aria-label="Chatta con noi">
+                            <?= $hyvaicons->whatsappColorchangingHtml('text-[#5DB95D]', 19, 19) ?>
+                        </a>
+                        <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>" class="" aria-label="Account">
+                            <?= $hyvaicons->aleaccountHtml('text-black', 20, 20) ?>
+                        </a>
+
+                        <?php if ($showMiniCart): ?>
+                            <button type="button" class="relative p-2" @click="$dispatch('toggle-cart', { isOpen: true })" aria-label="Carrello">
+                                <?= $hyvaicons->alecartHtml('text-black', 20, 20) ?>
+                                <span
+                                    class="flex items-center justify-center absolute bottom-1 right-[-2px]  w-4 h-4 min-w-[15px] min-h-[15px] rounded-full bg-[#ea001b] lg:bg-secondary text-white"
+                                    x-text="(cart && cart.summary_count !== undefined) ? (cart.summary_count || 0) : 0">
+                                </span>
+
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seconda Riga Mobile -->
+            <div class="mx-auto px-4 pb-1">
+                <div class="relative mb-1">
+                    <?= $block->getChildHtml('header-search'); ?>
+                </div>
+                <div class="p-2 animate-custom-loop text-center border-2 border-[#284C70] rounded-md">
+                    <span class="font-semibold">Spedizioni Gratuite</span>
+                    <span class="text-[#F5B301] font-semibold"> da €79,90</span>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <!-- ======== PANNELLO MENU MOBILE (MODIFICATO) ======== -->
+    <!-- Overlay -->
+    <div x-show="isMobileMenuOpen" x-cloak class="fixed inset-0 bg-gray-800 bg-opacity-75 z-40" @click="isMobileMenuOpen = false"></div>
+
+    <!-- Contenuto Menu -->
+    <div
+        x-show="isMobileMenuOpen"
+        x-cloak
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="-translate-x-full"
+        x-transition:enter-end="translate-x-0"
+        x-transition:leave="transition ease-in duration-300"
+        x-transition:leave-start="translate-x-0"
+        x-transition:leave-end="-translate-x-full"
+        class="fixed top-0 left-0 w-4/5 max-w-sm h-full bg-white z-50 shadow-lg flex flex-col">
+        <div class="flex items-center justify-end p-4 border-b">
+            <button @click="isMobileMenuOpen = false" class="p-2" aria-label="Chiudi menu">
+                <?= $lucideIcons->xHtml('w-6 h-6 text-gray-700', 24, 24) ?>
+            </button>
+        </div>
+
+        <div class="flex-grow p-4 space-y-5 overflow-y-auto">
+            <!-- Pulsanti in alto -->
+            <div class="space-y-3 px-2">
+                <a href="https://wa.me/391234567890" target="_blank" class="flex items-center justify-start gap-2 w-full bg-[#5DB95D] text-xs text-white font-semibold px-4 py-2 rounded-md text-center">
+                    <span>Chatta Con Noi</span>
+                    <?= $hyvaicons->whatsappHtml('w-5 h-5', 20, 20) ?>
+                </a>
+                <a href="/promozioni" class="block w-full bg-[#EA4C50] text-white font-semibold py-2 px-4 rounded-md text-start">
+                    Promo Fino a -70% di Sconto
+                </a>
+            </div>
+
+            <!-- Voci di menu -->
+            <div class="px-2 pt-2">
+                <nav class="flex flex-col space-y-4 text-gray-800 text-base">
+                    <a href="/alimentazione-e-integratori" class="flex justify-between items-center py-2">
+                        <span>Alimentazione e Integratori</span>
+                        <?= $lucideIcons->chevronRightHtml('w-5 h-5 text-gray-400', 20, 20) ?>
+                    </a>
+                    <a href="/igiene-e-benessere" class="flex justify-between items-center py-2">
+                        <span>Igiene e Benessere</span>
+                        <?= $lucideIcons->chevronRightHtml('w-5 h-5 text-gray-400', 20, 20) ?>
+                    </a>
+                    <a href="/mamme-e-bambine" class="flex justify-between items-center py-2">
+                        <span>Mamme e Bambine</span>
+                        <?= $lucideIcons->chevronRightHtml('w-5 h-5 text-gray-400', 20, 20) ?>
+                    </a>
+                    <a href="/erboristeria-e-fitoterapia" class="flex justify-between items-center py-2">
+                        <span>Erboristeria e Fitoterapia</span>
+                        <?= $lucideIcons->chevronRightHtml('w-5 h-5 text-gray-400', 20, 20) ?>
+                    </a>
+                    <a href="/bellezza-e-cosmetica" class="flex justify-between items-center py-2">
+                        <span>Bellezza e Cosmetica</span>
+                        <?= $lucideIcons->chevronRightHtml('w-5 h-5 text-gray-400', 20, 20) ?>
+                    </a>
+                    <a href="/salute-e-cura-della-persona" class="flex justify-between items-center py-2">
+                        <span>Salute e Cura della Persona</span>
+                        <?= $lucideIcons->chevronRightHtml('w-5 h-5 text-gray-400', 20, 20) ?>
+                    </a>
+                    <a href="/veterinaria-ed-animali" class="flex justify-between items-center py-2">
+                        <span>Veterinaria ed Animali</span>
+                        <?= $lucideIcons->chevronRightHtml('w-5 h-5 text-gray-400', 20, 20) ?>
+                    </a>
+                    <a href="/apparecchi-elettromedicali" class="flex justify-between items-center py-2">
+                        <span>Apparecchi Elettromedicali</span>
+                        <?= $lucideIcons->chevronRightHtml('w-5 h-5 text-gray-400', 20, 20) ?>
+                    </a>
+                    <a href="/galenica" class="flex justify-between items-center py-2">
+                        <span>Galenica</span>
+                        <?= $lucideIcons->chevronRightHtml('w-5 h-5 text-gray-400', 20, 20) ?>
+                    </a>
+                    <a href="/omeopatia" class="flex justify-between items-center py-2">
+                        <span>Omeopatia</span>
+                        <?= $lucideIcons->chevronRightHtml('w-5 h-5 text-gray-400', 20, 20) ?>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Pulsanti in basso -->
+            <div class="flex flex-col gap-3 pt-4 px-2">
+                <a href="/rimedi" class="block w-full bg-[#284C70] text-white font-semibold py-2 px-4 rounded-md text-start">
+                    I Nostri Rimedi
+                </a>
+                <a href="/coupon" class="block w-full bg-[#FFD020] text-gray-800 font-semibold  py-2 px-4 rounded-md text-start">
+                    I Nostri Coupon
+                </a>
+            </div>
+        </div>
+    </div>
 
     <!--Cart Drawer-->
-  <?= $block->getChildHtml('cart-drawer'); ?>
+    <?= $block->getChildHtml('cart-drawer'); ?>
 
-  <!--Authentication Pop-Up-->
-  <?= $block->getChildHtml('authentication-popup'); ?>
+    <!--Authentication Pop-Up-->
+    <?= $block->getChildHtml('authentication-popup'); ?>
 </div>

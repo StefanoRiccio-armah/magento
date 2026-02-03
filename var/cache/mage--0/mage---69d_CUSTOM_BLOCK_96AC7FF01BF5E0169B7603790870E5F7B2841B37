@@ -1,0 +1,66 @@
+a:4:{s:4:"hash";s:0:"";s:5:"mtime";i:1770134800;s:6:"expire";i:1770138400;s:4:"tags";s:45:"69d_CAT_P_6,69d_CAT_P,69d_BLOCK_HTML,69d_MAGE";}
+
+    <!-- FORM -->
+<form method="post"
+    action="https://app.stefano.test/checkout/cart/add/uenc/%25uenc%25/product/6/"
+  class="border relative item product product-item product_addtocart_form card card-interactive flex flex-col w-full h-full bg-white hover:bg-white p-1.5 rounded-none"
+                                        data-sku="Carobin&#x20;Pet-1-1-1-1-1"
+            >
+    <input name="form_key" type="hidden" value="LfOsAsklaSEzEvbA" />    <input type="hidden" name="product" value="6">
+                    <a href="https://app.stefano.test/carobin-pet-5.html"
+            title="Carobin&#x20;Pet"
+            class="product photo product-item-photo block mx-auto mb-3 "
+            tabindex="-1"
+        >
+            <img
+    src="https://app.stefano.test/media/catalog/product/cache/df945643c708de910fe635753a647f0a/c/a/carobin_pet_1_1_1_1_1.jpg"
+    width="360"
+    height="360"
+    alt="Carobin&#x20;Pet"
+    class="product-image-photo"
+            loading="lazy"
+        x-data="initProductItemImage"
+    @update-gallery-6.window="updateImage"
+    >
+        </a>
+        <div class="product-info flex flex-col grow ">
+        <div class="mt-2 mb-1 items-center justify-center  text-sm text-start text-black px-2 ">
+            <a
+                class="product-item-link"
+                href="https://app.stefano.test/carobin-pet-5.html"
+            >
+                Carobin Pet            </a>
+        </div>
+                            
+        
+        
+        <div class="flex items-center justify-between px-2 mt-auto mb-2">
+             <div class="pt-1 flex-1"
+             x-data="initPriceBox()"
+             x-defer="intersect"
+             @update-prices-6.window="updatePrice($event.detail);"
+        >
+            <div class="price-box price-final_price" data-role="priceBox" data-product-id="6" data-price-box="product-id-6">
+    <span
+    x-data x-id="['product\u002Dprice\u002D6']"    class="price-container price-final_price&#x20;tax&#x20;weee"
+        >
+        <span  :id="$id('product\u002Dprice\u002D6')"                data-price-amount="25.99"
+        data-price-type="finalPrice"
+        class="price-wrapper "
+    ><span class="price">25,99 €</span></span>
+        </span>
+
+</div>        </div>
+                                            <button
+                    class="btn btn-primary text-sm me-auto"
+                    aria-label="Acquista&#x20;Carobin&#x20;Pet"
+                    data-addto="cart"
+                >
+                    <span class="inline md:hidden lg:inline">
+                        Acquista                    </span>
+                </button>
+                
+                        
+        </div>
+    </div>
+</form>

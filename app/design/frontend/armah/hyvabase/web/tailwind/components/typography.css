@@ -1,0 +1,189 @@
+@layer utilities {
+  /* This class only exists for backwards compatibility, */
+  /* The default is applied in tailwind.config.js since Hyvä 1.2.0 */
+  .text-sans-serif {
+    font-family: "ProximaNova" ,"Helvetica Neue", Arial, sans-serif;
+}
+}
+
+@font-face {
+font-family: 'ProximaNova';
+font-style: normal;
+font-weight: 900;
+font-display: swap;
+src: url(../fonts/ProximaNova-Black.woff2) format('woff2');
+}
+
+@font-face {
+font-family: 'ProximaNova';
+font-style: normal;
+font-weight: 800;
+font-display: swap;
+src: url(../fonts/ProximaNova-Extrabld.woff2) format('woff2');
+}
+
+@font-face {
+font-family: 'ProximaNova';
+font-style: normal;
+font-weight: 700;
+font-display: swap;
+src: url(../fonts/ProximaNova-Bold.woff2) format('woff2');
+}
+
+@font-face {
+font-family: 'ProximaNova';
+font-style: normal;
+font-weight: 600;
+font-display: swap;
+src: url(../fonts/ProximaNova-Semibold.woff2) format('woff2');
+}
+
+@font-face {
+font-family: 'ProximaNova';
+font-style: normal;
+font-weight: 500;
+font-display: swap;
+src: url(../fonts/ProximaNova-Regular.woff2) format('woff2');
+}
+
+@font-face {
+font-family: 'ProximaNova';
+font-style: normal;
+font-weight: 400;
+font-display: swap;
+src: url(../fonts/ProximaNova-Regular.woff2) format('woff2');
+}
+
+@font-face {
+font-family: 'ProximaNova';
+font-style: normal;
+font-weight: 300;
+font-display: swap;
+src: url(../fonts/ProximaNova-Light.woff2) format('woff2');
+}
+
+@font-face {
+font-family: 'ProximaNova';
+font-style: normal;
+font-weight: 200;
+font-display: swap;
+src: url(../fonts/ProximaNova-Light.woff2) format('woff2');
+}
+
+@font-face {
+font-family: 'ProximaNova';
+font-style: normal;
+font-weight: 100;
+font-display: swap;
+src: url(../fonts/ProximaNova-Thin.woff2) format('woff2');
+}
+
+.text-15{
+font-size: 15px;
+line-height: 22px;
+}
+
+.text-13{
+font-size: 13px;
+line-height: 18px;
+}
+
+.custom-letter-spacing{
+  letter-spacing: -0.2px;
+}
+
+html {
+  @apply antialiased;
+}
+
+body {
+  @apply text-black leading-normal text-15 custom-letter-spacing text-sans-serif w-full;
+}
+
+.customer-account-create .form.create{
+input[type="text"],input[type="password"], input[type="email"],text-field, text-area{
+  width:100%;
+}
+input[type="text"],input[type="password"],input[type="email"], text-area ,text-field, .primary button[type="submit"]{
+  border-radius: 6px !important;
+}
+}
+
+
+.colonna-servizi{
+button[aria-label="Show form"]{
+  @apply text-black bg-transparent shadow-none border-0 font-semibold m-0 p-0
+}
+}
+
+
+.amblog-post-content [data-content-type=row][data-appearance=contained]{
+  @apply pl-0 pr-0 !important;
+}
+
+.testo-statico,
+.cms-page-view .column.main, 
+.amblog-index-post .column.main {
+
+  table,th,td{
+    @apply px-2.5 py-2;
+  }
+
+  tr:nth-child(even){
+    @apply bg-container;
+  }
+  thead{
+    @apply bg-secondary text-white;
+  }
+
+  h2{
+    font-size: 22px;
+  }
+
+  h3{
+    font-size: 18px;
+  }
+  h4,h5,h6{
+    font-size: 16px;
+  }
+
+  p{
+    font-size: 14px;
+  }
+
+  h2,h3,h4,h5,h6,p{
+    padding: 10px 0;
+  }
+
+  ul,ol{
+    padding-left: 50px;
+  }
+  ul li:not(.splide__slide) {
+    list-style: disc !important;
+  }
+  ol li {
+    list-style: decimal !important;
+  }
+
+}
+
+.cms-page-view,.amblog-index-post {
+    h1{
+      margin: 0 6px !important;
+      padding: .25rem 0;
+      border-bottom: 2px lightgray solid;
+      font-size: 30px;
+      
+    }
+  
+    .columns{
+      margin-top: 30px;
+      grid-template-rows: repeat(1,1fr);
+    }
+  
+    aside{
+      @apply h-full bg-[#ececec] p-6 rounded-xl;
+    }
+  
+   
+}
