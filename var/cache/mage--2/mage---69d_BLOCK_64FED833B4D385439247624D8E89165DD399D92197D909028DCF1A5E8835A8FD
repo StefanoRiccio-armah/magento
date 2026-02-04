@@ -1,4 +1,4 @@
-a:4:{s:4:"hash";s:0:"";s:5:"mtime";i:1770134799;s:6:"expire";i:1770138399;s:4:"tags";s:127:"69d_CAT_C_3,69d_CAT_C_P_3,69d_CAT_C_6,69d_CAT_C_P_6,69d_CAT_C_4,69d_CAT_C_P_4,69d_CAT_C_5,69d_CAT_C_P_5,69d_BLOCK_HTML,69d_MAGE";}
+a:4:{s:4:"hash";s:0:"";s:5:"mtime";i:1770221470;s:6:"expire";i:1770225070;s:4:"tags";s:127:"69d_CAT_C_3,69d_CAT_C_P_3,69d_CAT_C_6,69d_CAT_C_P_6,69d_CAT_C_4,69d_CAT_C_P_4,69d_CAT_C_5,69d_CAT_C_P_5,69d_BLOCK_HTML,69d_MAGE";}
 <div x-data="initMobileMenu" x-bind="eventListeners" class="lg:hidden">
     <button
         type="button"
